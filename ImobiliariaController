@@ -1,0 +1,67 @@
+public class ImobiliariaController {
+    
+    public Integer quartos {get;set;}
+    public Integer banheiros {get;set;}
+    public Integer sala {get;set;}
+    public Integer cozinha {get;set;}
+    public Integer copa {get;set;}
+    public Integer suite {get;set;}
+    public Integer vagas {get;set;}
+    public Integer valor {get;set;}
+    public String tipo{get;set;}
+    
+    //Método para seleção da lista
+    public List<SelectOption> getTipos(){
+        
+        // Mapear o campo de lista de seleção/picklist que desejo listar
+        Schema.DescribeFieldResult result = Imoveis__c.Tipo__c.getDescribe();
+        
+        // Listar as opções válidas dentro do campo
+        List<Schema.PicklistEntry> entries = result.getPickListValues();
+        
+        // Variável de retorno do tipo da lista para o objeto SelectOption
+        List<SelectOption> options = new List<SelectOption>();
+        
+        //Iterar a lista, para pegar as opções dos campos listados
+        for(Schema.PicklistEntry x : entries){
+            //Se a opção está ativa
+            if(x.isActive()){
+                // adiciona o nome e o valor na variável de retorno
+                options.add(new SelectOption(x.getValue(), x.getLabel()));   
+            }
+        }
+        
+        return options;
+    }
+    
+    public void salvarImoveis(){
+        Imoveis__c obj = new Imoveis__c();
+        obj.Quartos__c = quartos;
+        obj.Banheiro__c = banheiros;
+        obj.Sala__c = sala;
+        obj.Cozinha__c = cozinha;
+        obj.Copa__c = copa;
+        obj.Suite__c = suite;
+        obj.Garagem__c = vagas;
+        obj.Valor__c = valor;
+        obj.Tipo__c = tipo;
+        
+        try{
+            if(obj.Tipo__c != 'Nenhum' && obj.Tipo__c != null){
+                insert obj;
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.CONFIRM,'Imóvel cadastrado com sucesso!'));
+               	quartos = null;
+                banheiros = null;
+                sala = null;
+                cozinha = null;
+                copa = null;
+                suite = null;
+                vagas = null;
+                valor = null;
+                tipo = null;
+            }
+        }catch(DmlException e){
+  				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
+        }
+    }
+}
