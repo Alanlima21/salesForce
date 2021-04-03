@@ -59,7 +59,9 @@ public class ImobiliariaController {
                 vagas = null;
                 valor = null;
                 tipo = null;
-            }
+            }else{
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR,'O campo imóvel não pode ser vazio!'));
+				}
         }catch(DmlException e){
   				ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, e.getMessage()));
         }
